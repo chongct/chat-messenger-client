@@ -14,7 +14,7 @@ export default function LoginPage() {
           <Button text="Sign in" />
         </form>
         <p className="mt-6 mb-8 text-center text-base text-[var(--foreground-text)]">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <a className="font-semibold text-[var(--button-background)]" href="/register">
             Sign up
           </a>
