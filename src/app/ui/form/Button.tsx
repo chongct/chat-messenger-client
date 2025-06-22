@@ -2,7 +2,7 @@ type ButtonProps = {
   text: string;
 };
 
-export async function Button(props: ButtonProps) {
+export function Button(props: ButtonProps) {
   const { text } = props;
 
   return (

@@ -1,6 +1,7 @@
 .lockIcon,
 .mailIcon,
-.userIcon {
+.userIcon,
+.alertIcon {
   background-color: var(--foreground-text);
   height: 1.25rem;
   left: 0.75rem;
@@ -21,4 +22,10 @@
 
 .userIcon {
   mask-image: url('/user.svg');
+}
+
+.alertIcon {
+  background-color: var(--warning);
+  left: 0;
+  mask-image: url('/alert.svg');
 }

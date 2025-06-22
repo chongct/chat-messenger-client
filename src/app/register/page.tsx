@@ -1,7 +1,20 @@
+'use client';
+
+import { useActionState } from 'react';
+import { redirect } from 'next/navigation';
+
 import { Button, EmailInput, PasswordInput } from '@/app/ui/form';
 import styles from '@/app/ui/icons.module.css';
+import { registerUser } from '@/app/services';
 
 export default function RegisterPage() {
+  const [status, formAction] = useActionState(registerUser, {});
+  const { error, success } = status;
+
+  if (success) {
+    redirect('/');
+  }
+
   return (
     <main className="flex items-center h-screen p-4">
       <div className="w-full max-w-md mx-auto pt-8 px-6 bg-[var(--card-background)] rounded-2xl">
@@ -9,7 +22,7 @@ export default function RegisterPage() {
         <p className="mt-2 text-center text-base text-[var(--foreground-text)]">
           Create your account to get started
         </p>
-        <form className="mt-6 space-y-6">
+        <form action={formAction} className="mt-6 space-y-6">
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="uppercase text-sm font-semibold tracking-wider" htmlFor="firstName">
@@ -22,7 +35,6 @@ export default function RegisterPage() {
                   name="firstName"
                   type="text"
                   placeholder="John"
-                  required
                   autoComplete="off"
                   className="w-full h-10 bg-[var(--background)] pl-10 py-2 rounded-xl"
                 />
@@ -35,15 +47,18 @@ export default function RegisterPage() {
                 name="lastName"
                 type="text"
                 placeholder="Doe"
-                required
                 autoComplete="off"
                 className="w-full h-10 bg-[var(--background)] pl-10 py-2 mt-3 rounded-xl"
               />
             </div>
           </div>
-          <EmailInput />
-          <PasswordInput />
-          <PasswordInput id="confirmPassword" labelText="Confirm password" />
+          <EmailInput error={error?.['email']} />
+          <PasswordInput error={error?.['password']} />
+          <PasswordInput
+            id="confirmPassword"
+            labelText="Confirm password"
+            error={error?.['confirmPassword']}
+          />
           <Button text="Create account" />
         </form>
         <p className="mt-6 mb-8 text-center text-base text-[var(--foreground-text)]">
