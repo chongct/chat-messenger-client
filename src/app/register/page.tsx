@@ -9,7 +9,7 @@ import { registerUser } from '@/app/services';
 
 export default function RegisterPage() {
   const [status, formAction] = useActionState(registerUser, {});
-  const { error, success } = status;
+  const { error, success } = status || {};
 
   if (success) {
     redirect('/');
