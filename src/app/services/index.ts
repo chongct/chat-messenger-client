@@ -1,7 +1,5 @@
-import config from '@/app/config';
+import { API_BASE_URL } from '@/app/config';
 import { fetchHelper } from '@/app/utils';
-
-const { API_BASE_URL } = config;
 
 export const registerUser = async (
   prevState: { error: Record<string, string>; success: boolean },
@@ -16,6 +14,7 @@ export const registerUser = async (
         password: formData.get('password'),
         confirmPassword: formData.get('confirmPassword'),
       }),
+      credentials: 'include',
       method: 'POST',
       url: `${API_BASE_URL}auth/register`,
     });
