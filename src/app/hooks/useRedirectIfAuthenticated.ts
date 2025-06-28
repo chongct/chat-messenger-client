@@ -5,7 +5,7 @@ import { useAuth } from '@/app/providers/AuthProvider';
 
 export const useRedirectIfAuthenticated = () => {
   const router = useRouter();
-  const { loading, user } = useAuth();
+  const { loading, user, refreshUser } = useAuth();
 
   useEffect(() => {
     if (user && !loading) {
@@ -17,5 +17,5 @@ export const useRedirectIfAuthenticated = () => {
     router.push('/login');
   }, [loading, user, router]);
 
-  return { loading, user };
+  return { loading, user, refreshUser };
 };

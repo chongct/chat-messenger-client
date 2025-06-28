@@ -10,7 +10,7 @@ import { useRedirectIfAuthenticated } from '@/app/hooks';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { loading, user } = useRedirectIfAuthenticated();
+  const { loading, user, refreshUser } = useRedirectIfAuthenticated();
   const [state, formAction] = useActionState(registerUser, {});
   const { error, success } = state ?? {};
   const {
@@ -21,9 +21,10 @@ export default function RegisterPage() {
 
   useEffect(() => {
     if (success) {
+      refreshUser();
       router.push('/');
     }
-  }, [router, success]);
+  }, [router, success, refreshUser]);
 
   if (loading || (!loading && user)) {
     return null;
