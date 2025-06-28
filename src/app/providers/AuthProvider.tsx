@@ -3,8 +3,9 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 import { checkAuth } from '@/app/services';
+import { noop } from '@/app/utils';
 
-const AuthContext = createContext({ loading: true, user: null });
+const AuthContext = createContext({ loading: true, user: null, refreshUser: noop });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(null);
@@ -26,7 +27,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setAuthStatus();
   }, []);
 
-  return <AuthContext.Provider value={{ loading, user }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ loading, user, refreshUser: setAuthStatus }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => useContext(AuthContext);

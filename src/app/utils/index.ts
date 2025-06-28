@@ -29,3 +29,5 @@ export const fetchHelper = async ({
     console.error(`[fetchHelper] Error with ${url}: ${error}`);
   }
 };
+
+export const noop = () => {};
