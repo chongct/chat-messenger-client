@@ -1,18 +1,32 @@
 'use client';
 
-import { useActionState } from 'react';
-import { redirect } from 'next/navigation';
+import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { Button, EmailInput, PasswordInput } from '@/app/ui/form';
 import styles from '@/app/ui/icons.module.css';
 import { registerUser } from '@/app/services';
+import { useRedirectIfAuthenticated } from '@/app/hooks';
 
 export default function RegisterPage() {
-  const [status, formAction] = useActionState(registerUser, {});
-  const { error, success } = status || {};
+  const router = useRouter();
+  const { loading, user } = useRedirectIfAuthenticated();
+  const [state, formAction] = useActionState(registerUser, {});
+  const { error, success } = state ?? {};
+  const {
+    email: emailError,
+    password: passwordError,
+    confirmPassword: confirmPasswordError,
+  } = error ?? {};
 
-  if (success) {
-    redirect('/');
+  useEffect(() => {
+    if (success) {
+      router.push('/');
+    }
+  }, [router, success]);
+
+  if (loading || (!loading && user)) {
+    return null;
   }
 
   return (
@@ -52,12 +66,12 @@ export default function RegisterPage() {
               />
             </div>
           </div>
-          <EmailInput error={error?.['email']} />
-          <PasswordInput error={error?.['password']} />
+          <EmailInput error={emailError} />
+          <PasswordInput error={passwordError} />
           <PasswordInput
             id="confirmPassword"
             labelText="Confirm password"
-            error={error?.['confirmPassword']}
+            error={confirmPasswordError}
           />
           <Button text="Create account" />
         </form>
