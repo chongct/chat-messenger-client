@@ -3,16 +3,17 @@
 import { useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { Button, EmailInput, PasswordInput } from '@/app/ui/form';
+import { EmailInput, PasswordInput } from '@/app/ui/form';
+import { Button } from '@/app/ui/Button';
 import styles from '@/app/ui/icons.module.css';
 import { registerUser } from '@/app/services';
 import { useRedirectIfAuthenticated } from '@/app/hooks';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { loading, user, refreshUser } = useRedirectIfAuthenticated();
+  const { loading, userId, refreshUser } = useRedirectIfAuthenticated();
   const [state, formAction] = useActionState(registerUser, {});
-  const { error, userId } = state ?? {};
+  const { error, userId: registerUserId } = state ?? {};
   const {
     email: emailError,
     password: passwordError,
@@ -20,13 +21,13 @@ export default function RegisterPage() {
   } = error ?? {};
 
   useEffect(() => {
-    if (userId) {
-      refreshUser();
+    if (registerUserId) {
+      refreshUser(registerUserId);
       router.push('/');
     }
-  }, [router, userId, refreshUser]);
+  }, [router, registerUserId, refreshUser]);
 
-  if (loading || (!loading && user)) {
+  if (loading || (!loading && userId)) {
     return null;
   }
 

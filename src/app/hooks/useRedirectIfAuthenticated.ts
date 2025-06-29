@@ -7,23 +7,23 @@ import { AUTHENTICATED_REDIRECT_ROUTES, RESTRICTED_ROUTES } from '@/app/config';
 export const useRedirectIfAuthenticated = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { loading, user, refreshUser } = useAuth();
+  const { loading, userId, refreshUser } = useAuth();
 
   useEffect(() => {
     if (loading) {
       return;
     }
 
-    if (AUTHENTICATED_REDIRECT_ROUTES.includes(pathname) && user) {
+    if (AUTHENTICATED_REDIRECT_ROUTES.includes(pathname) && userId) {
       router.push('/');
 
       return;
     }
 
-    if (RESTRICTED_ROUTES.includes(pathname) && !user) {
+    if (RESTRICTED_ROUTES.includes(pathname) && !userId) {
       router.push('/login');
     }
-  }, [loading, user, router, pathname]);
+  }, [loading, userId, router, pathname]);
 
-  return { loading, user, refreshUser };
+  return { loading, userId, refreshUser };
 };

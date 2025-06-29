@@ -52,3 +52,15 @@ export const checkAuth = async () => {
     console.error(`Error checking auth: ${error}`);
   }
 };
+
+export const logoutUser = async () => {
+  try {
+    return await fetchHelper({
+      credentials: 'include',
+      method: 'POST',
+      url: `${API_BASE_URL}auth/logout`,
+    });
+  } catch (error) {
+    console.error(`Error logging out: ${error}`);
+  }
+};
