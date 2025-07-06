@@ -14,6 +14,8 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --background: rgb(15, 23, 42);
+    --background-contrast: rgb(19, 29, 52);
+    --border: rgb(27, 41, 75);
     --button-background: rgb(37, 99, 235);
     --card-background: rgb(30, 41, 59, 0.9);
     --foreground: rgb(241, 245, 249);
