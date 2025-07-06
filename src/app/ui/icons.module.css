@@ -1,7 +1,7 @@
+.alertIcon,
 .lockIcon,
 .mailIcon,
-.userIcon,
-.alertIcon {
+.userIcon {
   background-color: var(--foreground-text);
   height: 1.25rem;
   left: 0.75rem;
@@ -12,20 +12,36 @@
   width: 1.25rem;
 }
 
-.mailIcon {
-  mask-image: url('/mail.svg');
+.alertIcon {
+  background-color: var(--warning);
+  left: 0;
+  mask-image: url('/alert.svg');
 }
 
 .lockIcon {
   mask-image: url('/lock.svg');
 }
 
-.userIcon {
-  mask-image: url('/user.svg');
+.logoutIcon {
+  background-color: var(--foreground);
+  height: 1.25rem;
+  mask-size: cover;
+  mask-image: url('/logout.svg');
+  width: 1.25rem;
 }
 
-.alertIcon {
-  background-color: var(--warning);
-  left: 0;
-  mask-image: url('/alert.svg');
+.mailIcon {
+  mask-image: url('/mail.svg');
+}
+
+.menuIcon {
+  background-color: var(--foreground);
+  height: 1.25rem;
+  mask-size: cover;
+  mask-image: url('/menu.svg');
+  width: 1.25rem;
+}
+
+.userIcon {
+  mask-image: url('/user.svg');
 }
