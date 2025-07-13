@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     setAuthStatus();
-  }, [accessToken]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <AuthContext.Provider value={{ loading, accessToken, setAccessToken, userId, setUserId }}>
