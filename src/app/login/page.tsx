@@ -10,19 +10,19 @@ import { useRedirectIfAuthenticated } from '@/app/hooks';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { loading, userId, refreshUser } = useRedirectIfAuthenticated();
+  const { loading, accessToken, updateAuthContext } = useRedirectIfAuthenticated();
   const [state, formAction] = useActionState(loginUser, {});
-  const { error, userId: loginUserId } = state ?? {};
+  const { accessToken: loginAccessToken, error } = state ?? {};
   const { email: emailError, password: passwordError, message: errorMessage } = error ?? {};
 
   useEffect(() => {
-    if (loginUserId) {
-      refreshUser(loginUserId);
+    if (loginAccessToken) {
+      updateAuthContext(state);
       router.push('/');
     }
-  }, [router, loginUserId, refreshUser]);
+  }, [router, loginAccessToken, state, updateAuthContext]);
 
-  if (loading || (!loading && userId)) {
+  if (loading || (!loading && accessToken)) {
     return null;
   }
 

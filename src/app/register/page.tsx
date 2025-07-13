@@ -11,9 +11,9 @@ import { useRedirectIfAuthenticated } from '@/app/hooks';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { loading, userId, refreshUser } = useRedirectIfAuthenticated();
+  const { loading, accessToken, updateAuthContext } = useRedirectIfAuthenticated();
   const [state, formAction] = useActionState(registerUser, {});
-  const { error, userId: registerUserId } = state ?? {};
+  const { accessToken: registerAccessToken, error } = state ?? {};
   const {
     email: emailError,
     password: passwordError,
@@ -21,13 +21,13 @@ export default function RegisterPage() {
   } = error ?? {};
 
   useEffect(() => {
-    if (registerUserId) {
-      refreshUser(registerUserId);
+    if (registerAccessToken) {
+      updateAuthContext(state);
       router.push('/');
     }
-  }, [router, registerUserId, refreshUser]);
+  }, [router, registerAccessToken, state, updateAuthContext]);
 
-  if (loading || (!loading && userId)) {
+  if (loading || (!loading && accessToken)) {
     return null;
   }
 

@@ -11,19 +11,16 @@ import styles from '@/app/ui/icons.module.css';
 
 export default function HomePage() {
   const router = useRouter();
-  const { loading, userId, refreshUser } = useRedirectIfAuthenticated();
+  const { loading, accessToken, updateAuthContext } = useRedirectIfAuthenticated();
   const [isMenuExpanded, setMenuExpanded] = useState(false);
-
-  if (loading || (!loading && !userId)) {
-    return null;
-  }
 
   const onClickLogout = async () => {
     const response = await logoutUser();
     const { userId: logoutUserId } = response ?? {};
 
     if (response && !logoutUserId) {
-      refreshUser(logoutUserId);
+      updateAuthContext(response);
+
       router.push('/login');
     }
   };
@@ -31,6 +28,10 @@ export default function HomePage() {
   const onClickMenu = () => {
     setMenuExpanded(!isMenuExpanded);
   };
+
+  if (loading || (!loading && !accessToken)) {
+    return null;
+  }
 
   return (
     <div className='flex h-screen'>
