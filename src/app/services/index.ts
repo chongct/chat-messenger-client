@@ -42,10 +42,10 @@ export const loginUser = async (
   }
 };
 
-export const checkAuth = async () => {
+export const checkAuth = async (accessToken: string) => {
   try {
     return await fetchHelper({
-      credentials: 'include',
+      ...(accessToken && { headers: { Authorization: `Bearer ${accessToken}` } }),
       url: `${API_BASE_URL}auth/status`,
     });
   } catch (error) {
@@ -62,5 +62,17 @@ export const logoutUser = async () => {
     });
   } catch (error) {
     console.error(`Error logging out: ${error}`);
+  }
+};
+
+export const refreshToken = async () => {
+  try {
+    return await fetchHelper({
+      credentials: 'include',
+      method: 'POST',
+      url: `${API_BASE_URL}auth/refresh`,
+    });
+  } catch (error) {
+    console.error(`Error refreshing token: ${error}`);
   }
 };

@@ -10,39 +10,61 @@ import {
   type ReactNode,
 } from 'react';
 
-import { checkAuth } from '@/app/services';
+import { checkAuth, refreshToken } from '@/app/services';
 import { noop } from '@/app/utils';
 
 interface IAuthContext {
   loading: boolean;
+  accessToken: string;
+  setAccessToken: Dispatch<SetStateAction<string>>;
   userId: string;
-  refreshUser: Dispatch<SetStateAction<string>>;
+  setUserId: Dispatch<SetStateAction<string>>;
 }
 
-const AuthContext = createContext<IAuthContext>({ loading: true, userId: '', refreshUser: noop });
+const AuthContext = createContext<IAuthContext>({
+  loading: true,
+  accessToken: '',
+  setAccessToken: noop,
+  userId: '',
+  setUserId: noop,
+});
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [accessToken, setAccessToken] = useState('');
 
-  const setAuthStatus = async () => {
-    try {
-      const authStatus = await checkAuth();
-      const { userId: checkedUserId } = authStatus ?? {};
-      setUserId(checkedUserId);
-    } catch {
-      setUserId('');
-    } finally {
-      setLoading(false);
-    }
+  const attemptRefreshToken = async () => {
+    const refreshStatus = await refreshToken();
+    const { accessToken, userId } = refreshStatus ?? {};
+    setAccessToken(accessToken);
+    setUserId(userId);
   };
 
   useEffect(() => {
+    const setAuthStatus = async () => {
+      try {
+        const authStatus = await checkAuth(accessToken);
+        const { userId: checkedUserId } = authStatus ?? {};
+        setAccessToken(accessToken);
+        setUserId(checkedUserId);
+
+        if (!checkedUserId) {
+          await attemptRefreshToken();
+        }
+      } catch {
+        setAccessToken('');
+        setUserId('');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     setAuthStatus();
-  }, []);
+  }, [accessToken]);
 
   return (
-    <AuthContext.Provider value={{ loading, userId, refreshUser: setUserId }}>
+    <AuthContext.Provider value={{ loading, accessToken, setAccessToken, userId, setUserId }}>
       {children}
     </AuthContext.Provider>
   );
