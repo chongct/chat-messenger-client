@@ -37,19 +37,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const attemptRefreshToken = async () => {
     const refreshStatus = await refreshToken();
     const { accessToken, userId } = refreshStatus ?? {};
-    setAccessToken(accessToken);
-    setUserId(userId);
+
+    if (accessToken && userId) {
+      setAccessToken(accessToken);
+      setUserId(userId);
+    }
   };
 
   useEffect(() => {
     const setAuthStatus = async () => {
       try {
+        if (!accessToken) {
+          await attemptRefreshToken();
+
+          return;
+        }
+
         const authStatus = await checkAuth(accessToken);
         const { userId: checkedUserId } = authStatus ?? {};
-        setAccessToken(accessToken);
-        setUserId(checkedUserId);
 
-        if (!checkedUserId) {
+        if (checkedUserId) {
+          setUserId(checkedUserId);
+        } else {
           await attemptRefreshToken();
         }
       } catch {
@@ -61,7 +70,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     setAuthStatus();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [accessToken]);
 
   return (
     <AuthContext.Provider value={{ loading, accessToken, setAccessToken, userId, setUserId }}>
