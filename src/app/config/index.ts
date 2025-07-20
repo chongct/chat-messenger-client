@@ -5,3 +5,4 @@ export const API_BASE_URL =
 
 export const RESTRICTED_ROUTES = ['/'];
 export const AUTHENTICATED_REDIRECT_ROUTES = ['/login', '/register'];
+export const IS_COOKIE_DISABLED = true;

@@ -10,8 +10,8 @@ import {
   type ReactNode,
 } from 'react';
 
-import { checkAuth, refreshToken } from '@/app/services';
-import { noop } from '@/app/utils';
+import { checkAuth, getRefreshToken, getCsrfToken } from '@/app/services';
+import { noop, REFRESH_TOKEN_LOCAL_STORAGE_KEY } from '@/app/utils';
 
 interface IAuthContext {
   loading: boolean;
@@ -35,12 +35,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [accessToken, setAccessToken] = useState('');
 
   const attemptRefreshToken = async () => {
-    const refreshStatus = await refreshToken();
-    const { accessToken, userId } = refreshStatus ?? {};
+    await getCsrfToken();
+    const refreshStatus = await getRefreshToken();
+    const { accessToken, refreshToken: refreshTokenFromResponse, userId } = refreshStatus ?? {};
 
     if (accessToken && userId) {
       setAccessToken(accessToken);
       setUserId(userId);
+      localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY, refreshTokenFromResponse);
     }
   };
 

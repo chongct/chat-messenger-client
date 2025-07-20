@@ -1,5 +1,5 @@
-import { API_BASE_URL } from '@/app/config';
-import { fetchHelper } from '@/app/utils';
+import { API_BASE_URL, IS_COOKIE_DISABLED } from '@/app/config';
+import { fetchHelper, getCookie, REFRESH_TOKEN_LOCAL_STORAGE_KEY } from '@/app/utils';
 
 export const registerUser = async (
   prevState: { error: Record<string, string>; success: boolean },
@@ -59,20 +59,44 @@ export const logoutUser = async () => {
       credentials: 'include',
       method: 'POST',
       url: `${API_BASE_URL}auth/logout`,
+      headers: {
+        'x-csrf-token': getCookie('csrf_token'),
+        ...(IS_COOKIE_DISABLED
+          ? { 'x-refresh-token': localStorage.getItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY) || '' }
+          : {}),
+      },
     });
   } catch (error) {
     console.error(`Error logging out: ${error}`);
   }
 };
 
-export const refreshToken = async () => {
+export const getRefreshToken = async () => {
   try {
     return await fetchHelper({
       credentials: 'include',
       method: 'POST',
       url: `${API_BASE_URL}auth/refresh`,
+      headers: {
+        'x-csrf-token': getCookie('csrf_token'),
+        ...(IS_COOKIE_DISABLED
+          ? { 'x-refresh-token': localStorage.getItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY) || '' }
+          : {}),
+      },
     });
   } catch (error) {
     console.error(`Error refreshing token: ${error}`);
+  }
+};
+
+export const getCsrfToken = async () => {
+  try {
+    return await fetchHelper({
+      credentials: 'include',
+      method: 'GET',
+      url: `${API_BASE_URL}auth/csrf-token`,
+    });
+  } catch (error) {
+    console.error(`Error getting csrf token: ${error}`);
   }
 };

@@ -33,4 +33,16 @@ export const fetchHelper = async ({
   }
 };
 
+export const getCookie = (name: string) => {
+  const csrfTokenMatch = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+
+  if (csrfTokenMatch) {
+    return csrfTokenMatch[2];
+  }
+
+  return '';
+};
+
 export const noop = () => {};
+
+export const REFRESH_TOKEN_LOCAL_STORAGE_KEY = 'refreshToken';

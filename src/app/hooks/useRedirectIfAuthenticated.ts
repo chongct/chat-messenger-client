@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import { useAuth } from '@/app/providers/AuthProvider';
 import { AUTHENTICATED_REDIRECT_ROUTES, RESTRICTED_ROUTES } from '@/app/config';
+import { REFRESH_TOKEN_LOCAL_STORAGE_KEY } from '@/app/utils';
 
 export const useRedirectIfAuthenticated = () => {
   const router = useRouter();
@@ -25,9 +26,18 @@ export const useRedirectIfAuthenticated = () => {
     }
   }, [loading, accessToken, router, pathname]);
 
-  const updateAuthContext = ({ accessToken, userId }: { accessToken: string; userId: string }) => {
+  const updateAuthContext = ({
+    accessToken,
+    refreshToken,
+    userId,
+  }: {
+    accessToken: string;
+    refreshToken: string;
+    userId: string;
+  }) => {
     setAccessToken(accessToken);
     setUserId(userId);
+    localStorage.setItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY, refreshToken);
   };
 
   return { loading, accessToken, updateAuthContext };
