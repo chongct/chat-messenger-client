@@ -5,17 +5,19 @@ import clsx from 'clsx';
 import { useState } from 'react';
 
 import { useRedirectIfAuthenticated } from '@/app/hooks';
+import { useAuth } from '@/app/providers/AuthProvider';
 import { Button } from '@/app/ui/Button';
 import { logoutUser } from '@/app/services';
 import styles from '@/app/ui/icons.module.css';
 
 export default function HomePage() {
   const router = useRouter();
+  const { tempCsrf } = useAuth();
   const { loading, accessToken, updateAuthContext } = useRedirectIfAuthenticated();
   const [isMenuExpanded, setMenuExpanded] = useState(false);
 
   const onClickLogout = async () => {
-    const response = await logoutUser();
+    const response = await logoutUser(tempCsrf);
     const { userId: logoutUserId } = response ?? {};
 
     if (response && !logoutUserId) {

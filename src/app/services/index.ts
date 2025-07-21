@@ -1,5 +1,5 @@
 import { API_BASE_URL, IS_COOKIE_DISABLED } from '@/app/config';
-import { fetchHelper, getCookie, REFRESH_TOKEN_LOCAL_STORAGE_KEY } from '@/app/utils';
+import { fetchHelper, REFRESH_TOKEN_LOCAL_STORAGE_KEY } from '@/app/utils';
 
 export const registerUser = async (
   prevState: { error: Record<string, string>; success: boolean },
@@ -53,14 +53,14 @@ export const checkAuth = async (accessToken: string) => {
   }
 };
 
-export const logoutUser = async () => {
+export const logoutUser = async (csrfToken: string) => {
   try {
     return await fetchHelper({
       credentials: 'include',
       method: 'POST',
       url: `${API_BASE_URL}auth/logout`,
       headers: {
-        'x-csrf-token': getCookie('csrf_token'),
+        'x-csrf-token': csrfToken,
         ...(IS_COOKIE_DISABLED
           ? { 'x-refresh-token': localStorage.getItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY) || '' }
           : {}),
@@ -71,14 +71,14 @@ export const logoutUser = async () => {
   }
 };
 
-export const getRefreshToken = async () => {
+export const getRefreshToken = async (csrfToken: string) => {
   try {
     return await fetchHelper({
       credentials: 'include',
       method: 'POST',
       url: `${API_BASE_URL}auth/refresh`,
       headers: {
-        'x-csrf-token': getCookie('csrf_token'),
+        'x-csrf-token': csrfToken,
         ...(IS_COOKIE_DISABLED
           ? { 'x-refresh-token': localStorage.getItem(REFRESH_TOKEN_LOCAL_STORAGE_KEY) || '' }
           : {}),
