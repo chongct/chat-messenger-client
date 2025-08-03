@@ -12,6 +12,15 @@
   width: 1.25rem;
 }
 
+.logoutIcon,
+.menuIcon,
+.sendIcon {
+  background-color: var(--foreground);
+  height: 1.25rem;
+  mask-size: cover;
+  width: 1.25rem;
+}
+
 .alertIcon {
   background-color: var(--warning);
   left: 0;
@@ -23,11 +32,7 @@
 }
 
 .logoutIcon {
-  background-color: var(--foreground);
-  height: 1.25rem;
-  mask-size: cover;
   mask-image: url('/logout.svg');
-  width: 1.25rem;
 }
 
 .mailIcon {
@@ -35,11 +40,11 @@
 }
 
 .menuIcon {
-  background-color: var(--foreground);
-  height: 1.25rem;
-  mask-size: cover;
   mask-image: url('/menu.svg');
-  width: 1.25rem;
+}
+
+.sendIcon {
+  mask-image: url('/send.svg');
 }
 
 .userIcon {
