@@ -87,9 +87,9 @@ export default function HomePage() {
         <div className='flex-1'>
           <ChatDialogue chatDialogue={chatDialogue} isLoading={isLoading} />
         </div>
-        <div className='relative pl-2 py-4 bg-[var(--background-contrast)] border-t border-t-(--border)'>
+        <div className='relative px-4 py-4 bg-[var(--background-contrast)] border-t border-t-(--border)'>
           <input
-            className='h-10 w-9/10 px-3 py-2 bg-[var(--background)] border-2 border-(--border) rounded-full'
+            className='h-10 w-[85%] px-3 py-2 bg-[var(--background)] border-2 border-(--border) rounded-full'
             id='message'
             type='text'
             ref={inputRef}
