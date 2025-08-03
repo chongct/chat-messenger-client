@@ -36,7 +36,7 @@ export default function LoginPage() {
         <form action={formAction} className='mt-6 space-y-6'>
           <EmailInput error={emailError} />
           <PasswordInput error={passwordError || errorMessage} />
-          <Button className='w-full h-14 bg-[var(--button-background)]' text='Sign in' />
+          <Button className='w-full h-14 px-4 bg-[var(--button-background)]' text='Sign in' />
         </form>
         <p className='mt-6 mb-8 text-center text-base text-[var(--foreground-text)]'>
           Don&apos;t have an account?{' '}

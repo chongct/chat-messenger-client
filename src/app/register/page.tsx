@@ -75,7 +75,10 @@ export default function RegisterPage() {
             labelText='Confirm password'
             error={confirmPasswordError}
           />
-          <Button className='w-full h-14 bg-[var(--button-background)]' text='Create account' />
+          <Button
+            className='w-full h-14 px-4 bg-[var(--button-background)]'
+            text='Create account'
+          />
         </form>
         <p className='mt-6 mb-8 text-center text-base text-[var(--foreground-text)]'>
           Already have an account?{' '}

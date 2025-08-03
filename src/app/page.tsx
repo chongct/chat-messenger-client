@@ -70,7 +70,7 @@ export default function HomePage() {
       >
         {isMenuExpanded && (
           <Button
-            className='w-9/10 h-10 bg-[var(--background)]'
+            className='w-9/10 h-10 px-4 bg-[var(--background)]'
             onClick={onClickLogout}
             text='Logout'
           >
@@ -80,7 +80,7 @@ export default function HomePage() {
       </aside>
       <main className='flex flex-col flex-1 h-full'>
         <header className='py-3 px-4'>
-          <Button onClick={onClickMenu}>
+          <Button className='px-4' onClick={onClickMenu}>
             <div className={styles.menuIcon} />
           </Button>
         </header>
@@ -94,7 +94,7 @@ export default function HomePage() {
             type='text'
             ref={inputRef}
           />
-          <Button className='inline-block align-middle' onClick={onClickSend}>
+          <Button className='inline-block align-middle px-3' onClick={onClickSend}>
             <div className={styles.sendIcon} />
           </Button>
         </div>
