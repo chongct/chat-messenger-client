@@ -2,12 +2,13 @@
 
 import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { useRedirectIfAuthenticated } from '@/app/hooks';
 import { useAuth } from '@/app/providers/AuthProvider';
+import { ChatDialogue } from '@/app/ui/ChatDialogue';
 import { Button } from '@/app/ui/Button';
-import { logoutUser } from '@/app/services';
+import { logoutUser, postChat } from '@/app/services';
 import styles from '@/app/ui/icons.module.css';
 
 export default function HomePage() {
@@ -15,6 +16,10 @@ export default function HomePage() {
   const { tempCsrf } = useAuth();
   const { loading, accessToken, updateAuthContext } = useRedirectIfAuthenticated();
   const [isMenuExpanded, setMenuExpanded] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [chatDialogue, setChatDialogue] = useState<Record<string, string | boolean>[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [chatOutput, setChatOutput] = useState('');
 
   const onClickLogout = async () => {
     const response = await logoutUser(tempCsrf);
@@ -30,6 +35,26 @@ export default function HomePage() {
   const onClickMenu = () => {
     setMenuExpanded(!isMenuExpanded);
   };
+
+  const onClickSend = async () => {
+    const inputValue = inputRef.current?.value;
+
+    if (inputRef.current && inputValue) {
+      setChatDialogue(chatDialogue.concat({ text: inputValue }));
+      setIsLoading(true);
+      inputRef.current.value = '';
+      const output = await postChat(inputValue);
+      setChatOutput(output);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (chatOutput) {
+      setChatDialogue(chatDialogue.concat({ text: chatOutput, isReceived: true }));
+      setChatOutput('');
+    }
+  }, [chatDialogue, chatOutput]);
 
   if (loading || (!loading && !accessToken)) {
     return null;
@@ -59,13 +84,19 @@ export default function HomePage() {
             <div className={styles.menuIcon} />
           </Button>
         </header>
-        <div className='flex-1' />
-        <div className='px-4 py-4 bg-[var(--background-contrast)] border-t border-t-(--border)'>
+        <div className='flex-1'>
+          <ChatDialogue chatDialogue={chatDialogue} isLoading={isLoading} />
+        </div>
+        <div className='relative px-4 py-4 bg-[var(--background-contrast)] border-t border-t-(--border)'>
           <input
             className='h-10 w-9/10 px-3 py-2 bg-[var(--background)] border-2 border-(--border) rounded-full'
-            type='text'
             id='message'
+            type='text'
+            ref={inputRef}
           />
+          <Button className='inline-block align-middle' onClick={onClickSend}>
+            <div className={styles.sendIcon} />
+          </Button>
         </div>
       </main>
     </div>
